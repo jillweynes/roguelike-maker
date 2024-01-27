@@ -1,13 +1,33 @@
 <!doctype html>
 <html>
+
 <head>
-	<title>rot.js: bundle file</title>
+	<title>HS Competition POC</title>
 </head>
-<body>
-	<h1>rot.js: bundle file</h1>
-	<p>This example includes rot.js using a pre-built JavaScript bundle. Every browser supports this mechanism without the need to bundle/compile your code. You will, however, always load the complete library, even if you plan on using only a small part of it.</p>
-	<div id="q"></div>
+
+<body onload="create_game();">
+	<h1>HS Competition POC</h1>
+	<button onclick="create_blockly()">Code</button>
+	<button onclick="create_game()">Game</button>
+	<button onclick="run_blockly()">Run Blockly (TEMP)</button>
+	<div id="q" style="width:1900px; height:1000px"></div>
+
+	<!-- Game Scripts -->
 	<script src="rot.js"></script>
-	<script src="example.js"></script>
+	<script src="game.js"></script>
+
+	<!-- Visual Scripting Scripts -->
+	<script src="blockly.js"></script>
+	<script src="toolbox-contents.js"></script>
+	<!-- Load Blockly core -->
+	<script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+	<!-- Load the default blocks -->
+	<script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+	<!-- Load a generator -->
+	<script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+	<!-- Load a message file -->
+	<script src="https://unpkg.com/blockly/msg/en.js"></script>
+
 </body>
+
 </html>
