@@ -1,14 +1,22 @@
-var workspace;
+var workspace = null;
 function create_blockly() {
     teardown();
-    Blockly.setLocale("En");
-    document.getElementById("q").innerHTML = "";
+    
+    document.getElementById("game").innerHTML = "";
+    document.getElementById("gameout").style.display = "none";
+
+    document.getElementById("block").style.display = "block";
+    document.getElementById("items").style.display = "none";
 
 
-      
+    if (workspace == null) {
+        Blockly.setLocale("En");
+        workspace = Blockly.inject(
+            
+            document.getElementById('block'), { toolbox });
+    }
 
-    workspace = Blockly.inject(
-        document.getElementById('q'), { toolbox });   
+       
 }
 function run_blockly() {
     javascript.javascriptGenerator.addReservedWords('code');

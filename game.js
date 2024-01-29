@@ -1,5 +1,6 @@
 var loop = -1;
 var enemies = [];
+var items = [];
 function teardown() {
     if (loop != -1) {
         clearInterval(loop);
@@ -12,11 +13,15 @@ function teardown() {
 }
 function create_game() {
     teardown();
-    document.getElementById("q").innerHTML = "";
+    document.getElementById("game").innerHTML = "";
+    document.getElementById("block").style.display = "none";
+    document.getElementById("gameout").style.display = "block";
+    document.getElementById("items").style.display = "none";
     //Images
     var tileSet = document.createElement("img");
     tileSet.src = "pixilart-sprite.png";
 
+    var allItems = returnAllItems();
 
     //Setup display
     var W = 50;
@@ -33,26 +38,26 @@ function create_game() {
             "e": [64, 0],
             "w": [96, 0],
             "f": [128, 0],
+            "c": [160, 0],
         },
         tileWidth: 32,
         tileHeight: 32,
 
     }
     var d = new ROT.Display(o);
-    document.getElementById("q").appendChild(d.getContainer());
+    document.getElementById("game").appendChild(d.getContainer());
 
 
 
     //keyboard
     var input = document.createElement("input");
-    var out1 = document.createElement("div");
-    var out2 = document.createElement("div");
+    // var out1 = document.createElement("div");
+    // var out2 = document.createElement("div");
 
-    var up = false;
-    var down = false;
-    var left = false;
-    var right = false;
 
+    function collide() {
+        return mapData[playerx + "," + playery] == 1
+    }
 
 
     input.addEventListener("keydown", function (e) {
@@ -62,30 +67,93 @@ function create_game() {
         for (var name in ROT.KEYS) {
             if (ROT.KEYS[name] == code && name.indexOf("VK_") == 0) { vk = name; }
         }
+        if (!waitSel) {
+            if (vk == "VK_DOWN") {
+                playery += 1;
+                if (collide()) {
+                    playery -= 1;
+                }
+            }
+            if (vk == "VK_UP") {
+                playery -= 1;
+                if (collide()) {
+                    playery += 1;
+                }
+            }
+            if (vk == "VK_LEFT") {
+                playerx -= 1;
+                if (collide()) {
+                    playerx += 1;
+                }
+            }
+            if (vk == "VK_RIGHT") {
+                playerx += 1;
+                if (collide()) {
+                    playerx -= 1;
+                }
+            }
 
-        if (vk == "VK_DOWN") {
-            playery += 1;
+            if (vk == "VK_SPACE") {
+                attack();
+            }
+    
+            for (var i = 0; i < chests.length; i++) {
+                if (playerx == chests[i].x && playery == chests[i].y) {
+                    handleChest();
+                }
+            }
         }
-        if (vk == "VK_UP") {
-            playery -= 1;
+        else {
+            if (vk == "VK_1") {
+                waitSel = false;
+                items.push(item1)
+            }
+            else if (vk == "VK_2") {
+                waitSel = false;
+                items.push(item2)
+            }
+            else if (vk == "VK_3") {
+                waitSel = false;
+                items.push(item3)
+            }
+            if (waitSel == false) {
+                document.getElementById("itemPicker").style.display = "none";
+                chests = chests.filter(item => (item.x != playerx || item.y != playery))
+                var im = document.createElement("img")
+                im.src = "tiles.png"
+                im.width = 50
+                document.getElementById("list").appendChild(im)
+            }
+            console.log(items);
         }
-        if (vk == "VK_LEFT") {
-            playerx -= 1;
-        }
-        if (vk == "VK_RIGHT") {
-            playerx += 1;
-        }
+        
 
 
-        out1.innerHTML = "Keydown: code is " + code + " (" + vk + ")";
+
+        // out1.innerHTML = "Keydown: code is " + code + " (" + vk + ")";
         input.value = "";
     });
 
+    var waitSel = false;
+    var item1 = null;
+    var item2 = null;
+    var item3 = null;
 
+    function handleChest() {
+        document.getElementById("itemPicker").style.display = "block";
+        console.log(allItems)
+        item1 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
+        item2 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
+        item3 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
 
-    document.getElementById("q").appendChild(input)
-    document.getElementById("q").appendChild(out1)
-    document.getElementById("q").appendChild(out2)
+        waitSel = true;
+    }
+
+    input.style.position = "fixed"
+    input.style.top = "0"
+    document.getElementById("game").appendChild(input)
+    // document.getElementById("game").appendChild(out1)
+    // document.getElementById("game").appendChild(out2)
     input.focus();
 
     //Setup map
@@ -98,6 +166,7 @@ function create_game() {
     var mapData = {};
     // var enemies = [];
 
+    var chests = [];
 
     function createCallback(x, y, value) {
         mapData[x + "," + y] = value;
@@ -163,13 +232,17 @@ function create_game() {
 
 
 
-        d.draw(playerx, playery, "p")
-
+        
         for (var i = 0; i < enemies.length; i++) {
-            d.draw(enemies[i].x, enemies[i].y, "e");
+            d.drawOver(enemies[i].x, enemies[i].y, "e");
+        }
+
+        for (var i = 0; i < chests.length; i++) {
+            d.drawOver(chests[i].x, chests[i].y, "c");
         }
 
 
+        d.drawOver(playerx, playery, "p")
 
 
     }
@@ -238,4 +311,59 @@ function create_game() {
             }
         });
     }
+    function spawnChest() {
+        chest = getRandomSpawnPoint();
+        chests.push(chest);
+    }
+    for (var i = 0; i < 5; i++) {
+        spawnChest();
+    }
+
+
+    
+}
+
+function calculated_dmg(pos) {
+    function getRepeatedElements(arr) {
+        // Create an object to store the count of each element
+        let countMap = {};
+      
+        // Iterate through the array and count the occurrences of each element
+        arr.forEach((element) => {
+          countMap[element] = (countMap[element] || 0) + 1;
+        });
+      
+        // Filter the elements that have a count greater than 1 (repeated)
+        let repeatedElements = Object.keys(countMap).filter((element) => countMap[element] > 1);
+      
+        // Create a new list with elements and their counts
+        let result = repeatedElements.map((element) => ({ element, count: countMap[element] }));
+      
+        return result;
+      }
+      //First check valid position
+      var filtered = getRepeatedElements(items);
+      var total = 10;
+      filtered.forEach((tem) => eval("total += do_" + tem.element.name + "(" + tem.count + ");"));
+      //call instant dmg to do dmg to the guy
+
+      //bleed loop w wait
+      //whip keep spawning normal damage up
+      //bomb instant damage on die
+      //crit change w checking a random number depedning on how may of that itm
+ 
+}
+var particles = []
+
+function instant_dmg(pos, dmg) {
+             //if die
+      filtered.forEach((tem) => eval("total += die_" + tem.element.name + "(" + tem.count + ");"));
+}
+
+function get_enemy(pos) {
+        
+}
+
+function add_health(hel) {
+
 }
