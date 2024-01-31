@@ -11,6 +11,44 @@ function teardown() {
     }
     enemies = [];
 }
+
+var input = null;
+function start_game() {
+    teardown();
+    
+    document.getElementById("game").innerHTML = "";
+    document.getElementById("block").style.display = "none";
+    document.getElementById("gameout").style.display = "block";
+    document.getElementById("items").style.display = "none";
+    document.getElementById("start").style.display = "block";
+    document.getElementById("list").innerHTML = "";
+
+    document.getElementById("starttext").innerText = get_text("sttitle")
+    document.getElementById("startdesc").innerText = get_text("stdesc")
+    Promise.resolve(get("stimg")).then((res) => {
+        document.getElementById("startwidth").setAttribute("src", res);
+    })
+
+
+    input = document.createElement("input");
+    input.style.position = "fixed"
+    input.style.top = "0"
+    document.getElementById("gameout").appendChild(input)
+    input.focus();
+    var pidd = setInterval(() => {
+        input.focus();
+    }, 100);
+
+    var wer = input.addEventListener("keydown", function abc(event) {
+        document.getElementById("start").style.display = "none";
+        input.removeEventListener("keydown", abc);
+        console.log("qwe")
+        clearInterval(pidd);
+        create_game();
+    });
+}
+
+
 function create_game() {
     teardown();
     document.getElementById("game").innerHTML = "";
@@ -19,7 +57,14 @@ function create_game() {
     document.getElementById("items").style.display = "none";
     //Images
     var tileSet = document.createElement("img");
-    tileSet.src = "pixilart-sprite.png";
+    var result = getImages();
+    if (result == null) {
+        tileSet.src = "pixilart-sprite.png"
+    }
+    else {
+        tileSet.src = result;
+    }
+    
 
     var allItems = returnAllItems();
 
@@ -50,7 +95,7 @@ function create_game() {
 
 
     //keyboard
-    var input = document.createElement("input");
+    // var input = document.createElement("input");
     // var out1 = document.createElement("div");
     // var out2 = document.createElement("div");
 
@@ -119,10 +164,19 @@ function create_game() {
             if (waitSel == false) {
                 document.getElementById("itemPicker").style.display = "none";
                 chests = chests.filter(item => (item.x != playerx || item.y != playery))
+
+                item = items[items.length-1];
                 var im = document.createElement("img")
-                im.src = "tiles.png"
+                Promise.resolve(get(item.id + "img")).then((res) => {
+                    im.src = res;
+                })
                 im.width = 50
+                im.height = 50
                 document.getElementById("list").appendChild(im)
+
+                for (var i = 0; i < 5; i++) {
+                    spawnDefaultEnemy();
+                }
             }
             console.log(items);
         }
@@ -146,15 +200,34 @@ function create_game() {
         item2 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
         item3 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
 
+        document.getElementById("name1").innerText = item1.name
+        document.getElementById("desc1").innerText = item1.description
+        Promise.resolve(get(item1.id + "img")).then((res) => {
+            document.getElementById("img1").setAttribute("src", res)
+        })
+
+        document.getElementById("name2").innerText = item2.name
+        document.getElementById("desc2").innerText = item2.description
+        Promise.resolve(get(item2.id + "img")).then((res) => {
+            document.getElementById("img2").setAttribute("src", res)
+        })
+
+        document.getElementById("name3").innerText = item3.name
+        document.getElementById("desc3").innerText = item3.description
+        Promise.resolve(get(item1.id + "img")).then((res) => {
+            document.getElementById("img3").setAttribute("src", res)
+        })
+
+
         waitSel = true;
     }
 
-    input.style.position = "fixed"
-    input.style.top = "0"
-    document.getElementById("game").appendChild(input)
+    //input.style.position = "fixed"
+    //input.style.top = "0"
+    //document.getElementById("game").appendChild(input)
     // document.getElementById("game").appendChild(out1)
     // document.getElementById("game").appendChild(out2)
-    input.focus();
+    //input.focus();
 
     //Setup map
     // ROT.RNG.setSeed(1234);
@@ -181,6 +254,7 @@ function create_game() {
 
     async function work() {
         var lightData = {};
+        input.focus();
 
         /* prepare a FOV algorithm */
         function lightPasses(x, y) {

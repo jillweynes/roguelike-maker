@@ -5,36 +5,50 @@
 	<title>HS Competition POC</title>
 </head>
 
-<body onload="create_game();">
+<body onload="">
 	<h1>HS Competition POC</h1>
 	<button onclick="create_items()">Config</button>
 	<button onclick="create_blockly()">Code</button>
-	<button onclick="create_game()">Game</button>
+	<button onclick="start_game()">Game</button>
+	
 	<div style="position: absolute;">
-		<div id="gameout" style="width:1600px; height:800px">
+		<div id="gameout" style="width:1600px; height:800px; display: none; background-color: black;">
 			<div id="game" style="width:1600px; height:800px"></div>
 			<div style="position: absolute; top: 0px; left:0;">
 				<div style="width:1600px; height:800px">
-					<div  style=" position: absolute; background-color:rgba(255, 255, 255, 0.116); top:0; left:0; width:100%;">
+					<div id="start"
+						style=" position: absolute; background-color:rgb(0, 0, 0); color:white; top:0; left:0; width:100%; height:100%">
+							<h1 id="starttext"></h1>
+							<h1 id="startdesc"></h1>
+							<img id="startwidth" width="1600" height="300" />
+							<p>Press any key to continue</p>
+						</div>
+					</div>
+					<div
+						style=" position: absolute; background-color:rgba(255, 255, 255, 0.116); top:0; left:0; width:100%;">
 						<div id="list" style="display: flex; flex-direction: row;">
 						</div>
 					</div>
-					<div id="itemPicker" style=" display:none; position: absolute; background-color:white; top:25%; left:25%; width:50%; height:50%">
+					<div id="itemPicker"
+						style=" display:none; position: absolute; background-color:rgb(0, 0, 0); color:white; top:25%; left:25%; width:50%; height:50%">
 						<div style="display: flex; flex-direction: row;">
 							<div style="width: 33%;">
-								<img id="img1" src="tiles.png" width="100"height="100">
+								<img id="img1" src="tiles.png" width="100" height="100">
 								<h1 id="name1">1</h1>
 								<p id="desc1">1</p>
+								<p>[PRESS 1]</p>
 							</div>
 							<div style="width: 33%;">
-								<img id="img2" src="tiles.png" width="100"height="100">
+								<img id="img2" src="tiles.png" width="100" height="100">
 								<h1 id="name2">1</h1>
 								<p id="desc2">1</p>
+								<p>[PRESS 2]</p>
 							</div>
 							<div style="width: 33%;">
-								<img id="img2" src="tiles.png" width="100"height="100">
-								<h1 id="name2">1</h1>
-								<p id="desc2">1</p>
+								<img id="img3" src="tiles.png" width="100" height="100">
+								<h1 id="name3">1</h1>
+								<p id="desc3">1</p>
+								<p>[PRESS 3]</p>
 							</div>
 						</div>
 					</div>
@@ -43,19 +57,30 @@
 		</div>
 	</div>
 
-	<div id="block" style="width:1600px; height:800px"></div>
-	<div id="items" >
+	<div id="block" style="width:1600px; height:800px; display: none;"></div>
+	<div id="items" style="display: block;">
 		<h2>Starting</h2>
+		
 		<h3>Starting Title</h3>
-		<input id="sttitle">
+		<input id="sttitle" value="My Great Roguelike">
 
 		<h3>Starting Desc</h3>
-		<input id="stsesc">
+		<input id="stdesc" value="...">
 
 		<h3>Starting Image</h3>
 		<input id="stimg" type="file">
 
-		<h2>Gameplay Images</h2>
+		<h2>Gameplay Images (32x32 images)</h2>
+		<h3>Spritesheet</h3>
+		<!-- Canvas element for displaying the combined image -->
+		<div style="border: 1px solid black; width: fit-content;">
+			<canvas id="combinedCanvas" style="display: none; "></canvas>
+		</div>
+		<div style="border: 1px solid black; width: fit-content;">
+			<img id="combinedImage">
+		</div>
+
+		<button onclick="imgWorker()">update Spritesheet (might need pressing multiple times)</button>
 		<h3>Player image</h3>
 		<input id="playerimg" type="file">
 
@@ -66,13 +91,13 @@
 		<input id="atkimg" type="file">
 
 		<h3>Ground Image</h3>
-		<input id="atkimg" type="file">
+		<input id="gdimg" type="file">
 
 		<h3>Wall Image</h3>
-		<input id="atkimg" type="file">
+		<input id="wimg" type="file">
 
 		<h3>Chest Image</h3>
-		<input id="atkimg" type="file">
+		<input id="cimg" type="file">
 
 
 		<h2>Items:</h2>
