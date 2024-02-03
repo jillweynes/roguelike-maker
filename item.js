@@ -43,6 +43,13 @@ function returnAllItems() {
     }
     return temp;
 }
+function returnAllValidItems() {
+    var temp = [];
+    for (var i = 0; i < allItems.length; i++) {
+        temp.push({ id: i, name: allItems[i].name.value, description: allItems[i].name.value })
+    }
+    return temp;
+}
 
 
 async function get(el)  {
@@ -136,4 +143,22 @@ function imgWorker() {
 var fin = null;
 function getImages() {
     return fin;
+}
+
+
+function setFunc(id, e) {
+    console.log(id)
+    allItems[id].eval = e
+}
+function runAll() {
+    for (var i = 0; i < allItems.length; i++) {
+  
+            allItems[i].eval();
+        
+    }
+}
+function clearItemEvals() {
+    for (var i = 0; i < items.length; i++) {
+        allItems[i].eval
+    }
 }
