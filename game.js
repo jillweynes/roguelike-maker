@@ -1,6 +1,13 @@
 var loop = -1;
 var enemies = [];
 var items = [];
+var mrd = {x: 0, y: 1};
+var attacks = [];
+
+var playerx;
+var playery;
+var playerhealth = 100;
+var maxhealth = 100;
 function teardown() {
     if (loop != -1) {
         clearInterval(loop);
@@ -22,7 +29,7 @@ function start_game() {
     document.getElementById("items").style.display = "none";
     document.getElementById("start").style.display = "block";
     document.getElementById("list").innerHTML = "";
-
+    document.getElementById("end").style.display = "none"
     document.getElementById("starttext").innerText = get_text("sttitle")
     document.getElementById("startdesc").innerText = get_text("stdesc")
     Promise.resolve(get("stimg")).then((res) => {
@@ -55,6 +62,7 @@ function create_game() {
     document.getElementById("block").style.display = "none";
     document.getElementById("gameout").style.display = "block";
     document.getElementById("items").style.display = "none";
+
     //Images
     var tileSet = document.createElement("img");
     var result = getImages();
@@ -103,7 +111,7 @@ function create_game() {
     function collide() {
         return mapData[playerx + "," + playery] == 1
     }
-
+    
 
     input.addEventListener("keydown", function (e) {
         var code = e.keyCode;
@@ -115,24 +123,28 @@ function create_game() {
         if (!waitSel) {
             if (vk == "VK_DOWN") {
                 playery += 1;
+                mrd = {x: 0, y: 1};
                 if (collide()) {
                     playery -= 1;
                 }
             }
             if (vk == "VK_UP") {
                 playery -= 1;
+                mrd = {x: 0, y: -1};
                 if (collide()) {
                     playery += 1;
                 }
             }
             if (vk == "VK_LEFT") {
                 playerx -= 1;
+                mrd = {x: -1, y: 0};
                 if (collide()) {
                     playerx += 1;
                 }
             }
             if (vk == "VK_RIGHT") {
                 playerx += 1;
+                mrd = {x: 1, y: 0};
                 if (collide()) {
                     playerx -= 1;
                 }
@@ -247,10 +259,11 @@ function create_game() {
 
     map.create(createCallback);
 
-    spawn = getRandomSpawnPoint();
-    var playerx = spawn.x;
-    var playery = spawn.y;
+    var spawn = getRandomSpawnPoint();
+    playerx = spawn.x;
+    playery = spawn.y;
 
+    updateUI();
 
     async function work() {
         var lightData = {};
@@ -315,6 +328,10 @@ function create_game() {
             d.drawOver(chests[i].x, chests[i].y, "c");
         }
 
+        for (var i = 0; i < attacks.length; i++) {
+            d.drawOver(attacks[i].x, attacks[i].y, "a");
+        }
+
 
         d.drawOver(playerx, playery, "p")
 
@@ -375,6 +392,12 @@ function create_game() {
                     if (enemies[i].x == x && enemies[i].y == y && enemies[i].pid != me.pid) {
                         valid = false;
                     }
+                  
+                }
+                if (playerx == x && playery == y) {
+                    //player hit
+                    valid=false;
+                    doPlayerDmg();
                 }
                 if (valid) {
                     me.x = x;
@@ -385,6 +408,17 @@ function create_game() {
             }
         });
     }
+    function doPlayerDmg() {
+        playerhealth -= 10;
+        updateUI();
+    }
+    function updateUI () {
+        if (playerhealth < 0) {
+            document.getElementById("end").style.display = "block"
+        }
+        document.getElementById("currhealth").style.width = (playerhealth/maxhealth)*100 + "%"
+        document.getElementById("maxhealth").style.width = maxhealth + "%"
+    }
     function spawnChest() {
         chest = getRandomSpawnPoint();
         chests.push(chest);
@@ -392,11 +426,24 @@ function create_game() {
     for (var i = 0; i < 5; i++) {
         spawnChest();
     }
-
+    
 
     
 }
+function attack() {
+    var newx = playerx + mrd.x;
+    var newy = playery + mrd.y;
+    var id = Math.random()
+    attacks.push({x: newx, y: newy, id});
 
+    setTimeout(() => {
+        attacks = attacks.filter((el) => {el.id != id})
+    }, 300)
+
+    //fix functions below
+    //appropriatley call functions below
+
+}
 function calculated_dmg(pos) {
     function getRepeatedElements(arr) {
         // Create an object to store the count of each element

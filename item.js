@@ -111,6 +111,16 @@ function imgWorker() {
                     reader.readAsDataURL(fileInput.files[0]);
                 });
             }
+            else {
+                return new Promise((resolve) => {
+                    const img = document.createElement("img");
+                        //img.onload = function () {
+                        //    resolve(img);
+                        //};
+                        img.setAttribute("src","tiles.png");
+                        resolve(img)
+                })
+            }
 
         });
     
