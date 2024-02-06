@@ -379,6 +379,38 @@ const toolbox = {
         "kind": "block",
         "type": "clog2"
       },
+      {
+        "kind": "block",
+        "type": "noitem"
+      },
+      {
+        "kind": "block",
+        "type": "health"
+      },
+      {
+        "kind": "block",
+        "type": "one"
+      },
+      {
+        "kind": "block",
+        "type": "two"
+      },
+      {
+        "kind": "block",
+        "type": "three"
+      },
+      {
+        "kind": "block",
+        "type": "sone"
+      },
+      {
+        "kind": "block",
+        "type": "stwo"
+      },
+      {
+        "kind": "block",
+        "type": "sthree"
+      },
     ]
     },
   ],

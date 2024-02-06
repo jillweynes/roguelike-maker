@@ -34,10 +34,7 @@ function addItem() {
 }
 
 function returnAllItems() {
-    var temp = [];
-    for (var i = 0; i < allItems.length; i++) {
-        temp.push({ id: i, name: allItems[i].name.value, description: allItems[i].name.value })
-    }
+    var temp = returnAllValidItems();
     if (temp.length == 0) {
         temp.push({id:-1, name:"No items", description: "..."})
     }
@@ -46,7 +43,7 @@ function returnAllItems() {
 function returnAllValidItems() {
     var temp = [];
     for (var i = 0; i < allItems.length; i++) {
-        temp.push({ id: i, name: allItems[i].name.value, description: allItems[i].name.value })
+        temp.push({ id: i, name: allItems[i].name.value, description: allItems[i].name.value, exec: allItems[i].eval })
     }
     return temp;
 }

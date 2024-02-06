@@ -7,6 +7,9 @@ var attacks = [];
 var playerx;
 var playery;
 var playerhealth = 100;
+var playerparam1 = 0;
+var playerparam2 = 0;
+var playerparam3 = 0;
 var maxhealth = 100;
 function teardown() {
     if (loop != -1) {
@@ -440,32 +443,44 @@ function attack() {
         attacks = attacks.filter((el) => {el.id != id})
     }, 300)
 
+    calculated_dmg();
+
     //fix functions below
     //appropriatley call functions below
 
 }
-function calculated_dmg(pos) {
-    function getRepeatedElements(arr) {
-        // Create an object to store the count of each element
-        let countMap = {};
-      
-        // Iterate through the array and count the occurrences of each element
-        arr.forEach((element) => {
-          countMap[element] = (countMap[element] || 0) + 1;
+function calculated_dmg() {
+    function getRepeatedElements(inputList) {
+        // Initialize an empty Map to store counts
+        const counts = new Map();
+    
+        // Iterate through the inputList
+        inputList.forEach(item => {
+            // If the item is not in counts, initialize its count to 1
+            if (!counts.has(item)) {
+                counts.set(item, 1);
+            } else {
+                // If the item is already in counts, increment its count
+                counts.set(item, counts.get(item) + 1);
+            }
         });
-      
-        // Filter the elements that have a count greater than 1 (repeated)
-        let repeatedElements = Object.keys(countMap).filter((element) => countMap[element] > 1);
-      
-        // Create a new list with elements and their counts
-        let result = repeatedElements.map((element) => ({ element, count: countMap[element] }));
-      
+    
+        // Create an array to store unique items and their counts
+        const result = [];
+    
+        // Iterate through the counts Map and push items with counts to the result array
+        counts.forEach((count, item) => {
+            result.push({ item, count });
+        });
+    
         return result;
-      }
+    }
+    
       //First check valid position
       var filtered = getRepeatedElements(items);
-      var total = 10;
-      filtered.forEach((tem) => eval("total += do_" + tem.element.name + "(" + tem.count + ");"));
+      console.log("qwe")
+      console.log(filtered);
+      filtered.forEach((tem) => tem.item.exec(tem.count, playerhealth, playerparam1, playerparam2,  playerparam3));
       //call instant dmg to do dmg to the guy
 
       //bleed loop w wait
@@ -476,15 +491,15 @@ function calculated_dmg(pos) {
 }
 var particles = []
 
-function instant_dmg(pos, dmg) {
-             //if die
-      filtered.forEach((tem) => eval("total += die_" + tem.element.name + "(" + tem.count + ");"));
-}
+// function instant_dmg(pos, dmg) {
+//              //if die
+//       filtered.forEach((tem) => eval("total += die_" + tem.element.name + "(" + tem.count + ");"));
+// }
 
-function get_enemy(pos) {
+// function get_enemy(pos) {
         
-}
+// }
 
-function add_health(hel) {
+// function add_health(hel) {
 
-}
+// }
