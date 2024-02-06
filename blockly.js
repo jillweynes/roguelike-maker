@@ -144,6 +144,36 @@ function create_blockly() {
       }
     };
 
+    Blockly.Blocks['x'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "x",
+            "message0": "x",
+            "output": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
+    Blockly.Blocks['y'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "y",
+            "message0": "y",
+            "output": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
     Blockly.Blocks['sone'] = {
       init: function () {
         this.jsonInit(
@@ -210,10 +240,92 @@ function create_blockly() {
       }
     };
 
+    Blockly.Blocks['shealth'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "block_type",
+            "message0": "Set health %1",
+            "args0": [
+              {
+                "type": "input_value",
+                "name": "NAME"
+              }
+            ],
+            "previousStatement": null,
+            "nextStatement": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
+
+    Blockly.Blocks['idamage'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "block_type",
+            "message0": "Instant damage %1 x %2 y %3",
+            "args0": [
+              {
+                "type": "input_dummy"
+              },
+              {
+                "type": "input_value",
+                "name": "x"
+              },
+              {
+                "type": "input_value",
+                "name": "y"
+              }
+            ],
+            "previousStatement": null,
+            "nextStatement": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
+
+    Blockly.Blocks['ndamage'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "block_type",
+            "message0": "New attack %1 x %2 y %3",
+            "args0": [
+              {
+                "type": "input_dummy"
+              },
+              {
+                "type": "input_value",
+                "name": "x"
+              },
+              {
+                "type": "input_value",
+                "name": "y"
+              }
+            ],
+            "previousStatement": null,
+            "nextStatement": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
     javascript.javascriptGenerator.forBlock['clog'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = generator.valueToCode(block, 'NAME', javascript.Order.ATOMIC);
-      return "console.log(" + value + ")";
+      return "console.log(" + value + ");";
     }
 
 
@@ -221,61 +333,98 @@ function create_blockly() {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "console.log(\"" + value + "\")";
+      return "console.log(\"" + value + "\");";
     }
 
     javascript.javascriptGenerator.forBlock['noitem'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "number";
+      return ["number", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['health'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "health";
+      return ["health", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['one'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "one";
+      return ["getVar(0)", javascript.Order.NONE];
     }
     javascript.javascriptGenerator.forBlock['two'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "two";
+      return ["getVar(1)", javascript.Order.NONE];
     }
     javascript.javascriptGenerator.forBlock['three'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "three";
+      return ["getVar(2)", javascript.Order.NONE];
+    }
+
+    javascript.javascriptGenerator.forBlock['x'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const value = block.getFieldValue('NAME');
+      console.log(value)
+      return ["x", javascript.Order.NONE];
+    }
+
+    javascript.javascriptGenerator.forBlock['y'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const value = block.getFieldValue('NAME');
+      console.log(value)
+      return ["y", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['sone'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "setOne(" + value + ")";
+      return "setVar(0, " + value + ");";
     }
 
     javascript.javascriptGenerator.forBlock['stwo'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "setTwo(" + value + ")";
+      return "setVar(1, " + value + ");";
     }
 
     javascript.javascriptGenerator.forBlock['sthree'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
       console.log(value)
-      return "setThree(" + value + ")";
+      return "setVar(2, " + value + ");";
+    }
+
+    javascript.javascriptGenerator.forBlock['shealth'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const value = block.getFieldValue('NAME');
+      console.log(value)
+      return "setHealth(" + value + ");";
+    }
+
+    javascript.javascriptGenerator.forBlock['idamage'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const x = block.getFieldValue('x');
+      const y = block.getFieldValue('y');
+      console.log(value)
+      return "doDamage(" + x + ", " + y + ");";
+    }
+
+    javascript.javascriptGenerator.forBlock['ndamage'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const x = block.getFieldValue('x');
+      const y = block.getFieldValue('y');
+      console.log(value)
+      return "doAttack(" + x + ", " + y + ");";
     }
 
     workspace = Blockly.inject(
@@ -285,12 +434,12 @@ function create_blockly() {
 
 
   }
-
+  workee();
 
 }
 function run_blockly() {
   //update all item defs
-  clearItemEvals();
+  // clearItemEvals();
   javascript.javascriptGenerator.addReservedWords('code');
   var code = javascript.javascriptGenerator.workspaceToCode(workspace);
   eval(code);
@@ -299,7 +448,36 @@ function workee() {
   var items = returnAllValidItems();
   var toolboxCopy = JSON.parse(JSON.stringify(toolbox));
   for (var i = 0; i < items.length; i++) {
-    addWorker(items[i], toolboxCopy);
+    var str = items[i].id + "run"
+    console.log(items[i].id)
+    toolboxCopy.contents.push(
+      {
+        kind: 'category',
+        name: items[i].name,
+        contents: [
+          {
+            "kind": "block",
+            "type": str + "on hit",
+          },
+          {
+            "kind": "block",
+            "type": str + "on miss",
+          },
+          {
+            "kind": "block",
+            "type": str + "on kill",
+          },
+          {
+            "kind": "block",
+            "type": str + "on take damage",
+          },
+        ]
+      },
+    );
+    addWorker(items[i], toolboxCopy, "on hit");
+    addWorker(items[i], toolboxCopy, "on miss");
+    addWorker(items[i], toolboxCopy, "on kill");
+    addWorker(items[i], toolboxCopy, "on take damage");
   }
 
   workspace.updateToolbox(toolboxCopy);
@@ -307,27 +485,11 @@ function workee() {
 
 
 }
-function addWorker(item, toolboxCopy) {
-  var str = item.id + "run";
-  console.log(item.id)
-  toolboxCopy.contents.push(
-    {
-      kind: 'category',
-      name: item.name,
-      contents: [
-        {
-          "kind": "block",
-          "type": str,
-        },
-      ]
-    },
-  );
+function addWorker(item, toolboxCopy, purpose) {
+  var str = item.id + "run" + purpose
 
 
-
-  console.log(str)
-
-  var name = item.name + " on hit";
+  var name = item.name + " " + purpose;
   Blockly.Blocks[str] = {
     init: function () {
       this.jsonInit(
@@ -360,6 +522,6 @@ function addWorker(item, toolboxCopy) {
     // const value = generator.valueToCode(block, 'MY_VALUE_INPUT', Order.ATOMIC);
     console.log("HERE")
     console.log(statement)
-    return "setFunc(" + id + ",(number, health, one, two, three) => {" + statement + "})";
+    return "setFunc(\"" + purpose + "\", " + id + ",(number, health, x, y) => {" + statement + "}); ";
   }
 }

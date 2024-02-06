@@ -357,61 +357,81 @@ const toolbox = {
     },
     {
       kind: 'category',
-      name: 'Variables',
-      custom: 'VARIABLE',
-      categorystyle: 'variable_category',
+      name: 'Gameplay',
+      contents: [
+        {
+          "kind": "block",
+          "type": "noitem"
+        },
+        {
+          "kind": "block",
+          "type": "health"
+        },
+        {
+          "kind": "block",
+          "type": "shealth"
+        },
+        {
+          "kind": "block",
+          "type": "idamage"
+        },
+        {
+          "kind": "block",
+          "type": "ndamage"
+        },
+        {
+          "kind": "block",
+          "type": "x"
+        },
+        {
+          "kind": "block",
+          "type": "y"
+        },
+      ]
     },
     {
       kind: 'category',
-      name: 'Functions',
-      custom: 'PROCEDURE',
-      categorystyle: 'procedure_category',
+      name: 'Variables',
+      contents: [
+        {
+          "kind": "block",
+          "type": "one"
+        },
+        {
+          "kind": "block",
+          "type": "two"
+        },
+        {
+          "kind": "block",
+          "type": "three"
+        },
+        {
+          "kind": "block",
+          "type": "sone"
+        },
+        {
+          "kind": "block",
+          "type": "stwo"
+        },
+        {
+          "kind": "block",
+          "type": "sthree"
+        },
+      ]
     },
     {
-    kind: 'category',
-    name: 'Rogue Utils',
-    contents: [
-      {
-        "kind": "block",
-        "type": "clog"
-      },
-      {
-        "kind": "block",
-        "type": "clog2"
-      },
-      {
-        "kind": "block",
-        "type": "noitem"
-      },
-      {
-        "kind": "block",
-        "type": "health"
-      },
-      {
-        "kind": "block",
-        "type": "one"
-      },
-      {
-        "kind": "block",
-        "type": "two"
-      },
-      {
-        "kind": "block",
-        "type": "three"
-      },
-      {
-        "kind": "block",
-        "type": "sone"
-      },
-      {
-        "kind": "block",
-        "type": "stwo"
-      },
-      {
-        "kind": "block",
-        "type": "sthree"
-      },
-    ]
+      kind: 'category',
+      name: 'Debug Utils',
+      contents: [
+        {
+          "kind": "block",
+          "type": "clog"
+        },
+        {
+          "kind": "block",
+          "type": "clog2"
+        }
+      ]
     },
   ],
 };

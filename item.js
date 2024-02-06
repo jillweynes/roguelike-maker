@@ -29,7 +29,7 @@ function addItem() {
 
     el.appendChild(div);
 
-    item = { name, description, image }
+    item = { name, description, image, funcs: new Map() }
     allItems.push(item);
 }
 
@@ -153,19 +153,24 @@ function getImages() {
 }
 
 
-function setFunc(id, e) {
+function setFunc(e, id, f) {
     console.log(id)
-    allItems[id].eval = e
-}
-function runAll() {
-    for (var i = 0; i < allItems.length; i++) {
-  
-            allItems[i].eval();
-        
-    }
+    allItems[id].funcs.set(e, f); 
 }
 function clearItemEvals() {
     for (var i = 0; i < items.length; i++) {
-        allItems[i].eval
+        allItems[i].funcs = [];
+    }
+}
+function get_cmd(id, type) {
+    console.log(id)
+    console.log(type)
+    console.log(allItems)
+    if (allItems[id].funcs.get(type) == null) {
+        return ()=>{return null};
+    }
+    else {
+        return allItems[id].funcs.get(type)
+        
     }
 }

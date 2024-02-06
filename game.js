@@ -1,7 +1,7 @@
 var loop = -1;
 var enemies = [];
 var items = [];
-var mrd = {x: 0, y: 1};
+var mrd = { x: 0, y: 1 };
 var attacks = [];
 
 var playerx;
@@ -16,7 +16,7 @@ function teardown() {
         clearInterval(loop);
         loop = -1
     }
-    for(var i = 0; i < enemies.length; i++) {
+    for (var i = 0; i < enemies.length; i++) {
         clearInterval(enemies[i].pid);
     }
     enemies = [];
@@ -25,7 +25,7 @@ function teardown() {
 var input = null;
 function start_game() {
     teardown();
-    
+
     document.getElementById("game").innerHTML = "";
     document.getElementById("block").style.display = "none";
     document.getElementById("gameout").style.display = "block";
@@ -75,8 +75,8 @@ function create_game() {
     else {
         tileSet.src = result;
     }
-    
 
+    run_blockly();
     var allItems = returnAllItems();
 
     //Setup display
@@ -114,7 +114,7 @@ function create_game() {
     function collide() {
         return mapData[playerx + "," + playery] == 1
     }
-    
+
 
     input.addEventListener("keydown", function (e) {
         var code = e.keyCode;
@@ -126,28 +126,28 @@ function create_game() {
         if (!waitSel) {
             if (vk == "VK_DOWN") {
                 playery += 1;
-                mrd = {x: 0, y: 1};
+                mrd = { x: 0, y: 1 };
                 if (collide()) {
                     playery -= 1;
                 }
             }
             if (vk == "VK_UP") {
                 playery -= 1;
-                mrd = {x: 0, y: -1};
+                mrd = { x: 0, y: -1 };
                 if (collide()) {
                     playery += 1;
                 }
             }
             if (vk == "VK_LEFT") {
                 playerx -= 1;
-                mrd = {x: -1, y: 0};
+                mrd = { x: -1, y: 0 };
                 if (collide()) {
                     playerx += 1;
                 }
             }
             if (vk == "VK_RIGHT") {
                 playerx += 1;
-                mrd = {x: 1, y: 0};
+                mrd = { x: 1, y: 0 };
                 if (collide()) {
                     playerx -= 1;
                 }
@@ -156,7 +156,7 @@ function create_game() {
             if (vk == "VK_SPACE") {
                 attack();
             }
-    
+
             for (var i = 0; i < chests.length; i++) {
                 if (playerx == chests[i].x && playery == chests[i].y) {
                     handleChest();
@@ -180,7 +180,7 @@ function create_game() {
                 document.getElementById("itemPicker").style.display = "none";
                 chests = chests.filter(item => (item.x != playerx || item.y != playery))
 
-                item = items[items.length-1];
+                item = items[items.length - 1];
                 var im = document.createElement("img")
                 Promise.resolve(get(item.id + "img")).then((res) => {
                     im.src = res;
@@ -195,7 +195,7 @@ function create_game() {
             }
             console.log(items);
         }
-        
+
 
 
 
@@ -322,7 +322,7 @@ function create_game() {
 
 
 
-        
+
         for (var i = 0; i < enemies.length; i++) {
             d.drawOver(enemies[i].x, enemies[i].y, "e");
         }
@@ -395,11 +395,11 @@ function create_game() {
                     if (enemies[i].x == x && enemies[i].y == y && enemies[i].pid != me.pid) {
                         valid = false;
                     }
-                  
+
                 }
                 if (playerx == x && playery == y) {
                     //player hit
-                    valid=false;
+                    valid = false;
                     doPlayerDmg();
                 }
                 if (valid) {
@@ -415,11 +415,11 @@ function create_game() {
         playerhealth -= 10;
         updateUI();
     }
-    function updateUI () {
+    function updateUI() {
         if (playerhealth < 0) {
             document.getElementById("end").style.display = "block"
         }
-        document.getElementById("currhealth").style.width = (playerhealth/maxhealth)*100 + "%"
+        document.getElementById("currhealth").style.width = (playerhealth / maxhealth) * 100 + "%"
         document.getElementById("maxhealth").style.width = maxhealth + "%"
     }
     function spawnChest() {
@@ -429,18 +429,18 @@ function create_game() {
     for (var i = 0; i < 5; i++) {
         spawnChest();
     }
-    
 
-    
+
+
 }
 function attack() {
     var newx = playerx + mrd.x;
     var newy = playery + mrd.y;
     var id = Math.random()
-    attacks.push({x: newx, y: newy, id});
+    attacks.push({ x: newx, y: newy, id });
 
     setTimeout(() => {
-        attacks = attacks.filter((el) => {el.id != id})
+        attacks = attacks.filter((el) => { el.id != id })
     }, 300)
 
     calculated_dmg();
@@ -453,7 +453,7 @@ function calculated_dmg() {
     function getRepeatedElements(inputList) {
         // Initialize an empty Map to store counts
         const counts = new Map();
-    
+
         // Iterate through the inputList
         inputList.forEach(item => {
             // If the item is not in counts, initialize its count to 1
@@ -464,42 +464,61 @@ function calculated_dmg() {
                 counts.set(item, counts.get(item) + 1);
             }
         });
-    
+
         // Create an array to store unique items and their counts
         const result = [];
-    
+
         // Iterate through the counts Map and push items with counts to the result array
         counts.forEach((count, item) => {
             result.push({ item, count });
         });
-    
+
         return result;
     }
+
+    //First check valid position
+    var filtered = getRepeatedElements(items);
+    console.log("qwe")
+    console.log(filtered);
+    filtered.forEach((tem) => {
+        
+        
+        var cmd = get_cmd(tem.item, "on hit")
+        console.log(cmd);
+        cmd(tem.count, playerhealth, playerparam1, playerparam2, playerparam3, playerx, playery)
     
-      //First check valid position
-      var filtered = getRepeatedElements(items);
-      console.log("qwe")
-      console.log(filtered);
-      filtered.forEach((tem) => tem.item.exec(tem.count, playerhealth, playerparam1, playerparam2,  playerparam3));
-      //call instant dmg to do dmg to the guy
+    });
+    //call instant dmg to do dmg to the guy
 
-      //bleed loop w wait
-      //whip keep spawning normal damage up
-      //bomb instant damage on die
-      //crit change w checking a random number depedning on how may of that itm
- 
+    //bleed loop w wait
+    //whip keep spawning normal damage up
+    //bomb instant damage on die
+    //crit change w checking a random number depedning on how may of that itm
+
 }
-var particles = []
-
 // function instant_dmg(pos, dmg) {
 //              //if die
 //       filtered.forEach((tem) => eval("total += die_" + tem.element.name + "(" + tem.count + ");"));
 // }
 
-// function get_enemy(pos) {
-        
-// }
 
-// function add_health(hel) {
+function setHealth(health) {
+    playerhealth = health;
+    
+}
 
-// }
+function doDamage(dmg, x, y) {
+    console.log("Implement")
+}
+function doAttack(scaling, x, y) {
+    console.log("Implement")
+}
+
+
+var items = [0, 0, 0];
+function getVar(n) {
+    return items[n];
+}
+function setVar(n, val) {
+    items[n] = val;
+}
