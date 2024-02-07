@@ -174,6 +174,21 @@ function create_blockly() {
       }
     };
 
+    Blockly.Blocks['scaling'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "scaling",
+            "message0": "scaling factor",
+            "output": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
     Blockly.Blocks['sone'] = {
       init: function () {
         this.jsonInit(
@@ -268,7 +283,7 @@ function create_blockly() {
         this.jsonInit(
           {
             "type": "block_type",
-            "message0": "Instant damage %1 x %2 y %3",
+            "message0": "Instant damage %1 x %2 y %3 ammount %4",
             "args0": [
               {
                 "type": "input_dummy"
@@ -280,6 +295,10 @@ function create_blockly() {
               {
                 "type": "input_value",
                 "name": "y"
+              },
+              {
+                "type": "input_value",
+                "name": "ammount"
               }
             ],
             "previousStatement": null,
@@ -298,7 +317,7 @@ function create_blockly() {
         this.jsonInit(
           {
             "type": "block_type",
-            "message0": "New attack %1 x %2 y %3",
+            "message0": "New attack %1 x %2 y %3 scaling factor (0-1) %4",
             "args0": [
               {
                 "type": "input_dummy"
@@ -310,6 +329,10 @@ function create_blockly() {
               {
                 "type": "input_value",
                 "name": "y"
+              },
+              {
+                "type": "input_value",
+                "name": "scaling"
               }
             ],
             "previousStatement": null,
@@ -324,7 +347,7 @@ function create_blockly() {
 
     javascript.javascriptGenerator.forBlock['clog'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const value = generator.valueToCode(block, 'NAME', javascript.Order.ATOMIC);
+      const value = generator.valueToCode(block, 'NAME', javascript.Order.NONE);
       return "console.log(" + value + ");";
     }
 
@@ -332,99 +355,108 @@ function create_blockly() {
     javascript.javascriptGenerator.forBlock['clog2'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return "console.log(\"" + value + "\");";
     }
 
     javascript.javascriptGenerator.forBlock['noitem'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["number", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['health'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["health", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['one'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["getVar(0)", javascript.Order.NONE];
     }
     javascript.javascriptGenerator.forBlock['two'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["getVar(1)", javascript.Order.NONE];
     }
     javascript.javascriptGenerator.forBlock['three'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["getVar(2)", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['x'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["x", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['y'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
       const value = block.getFieldValue('NAME');
-      console.log(value)
+       
       return ["y", javascript.Order.NONE];
+    }
+
+    javascript.javascriptGenerator.forBlock['scaling'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const value = block.getFieldValue('NAME');
+       
+      return ["scaling", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['sone'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const value = block.getFieldValue('NAME');
-      console.log(value)
+      const value = generator.valueToCode(block, 'NAME', javascript.Order.NONE);
+       
       return "setVar(0, " + value + ");";
     }
 
     javascript.javascriptGenerator.forBlock['stwo'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const value = block.getFieldValue('NAME');
-      console.log(value)
+      const value = generator.valueToCode(block, 'NAME', javascript.Order.NONE);
+       
       return "setVar(1, " + value + ");";
     }
 
     javascript.javascriptGenerator.forBlock['sthree'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const value = block.getFieldValue('NAME');
-      console.log(value)
+      const value = generator.valueToCode(block, 'NAME', javascript.Order.NONE);
+       
       return "setVar(2, " + value + ");";
     }
 
     javascript.javascriptGenerator.forBlock['shealth'] = function (block, generator) {
-      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const value = block.getFieldValue('NAME');
-      console.log(value)
+      const value = generator.valueToCode(block, 'NAME', javascript.Order.NONE);
+      // const value = block.getFieldValue('NAME');
+       
       return "setHealth(" + value + ");";
     }
 
     javascript.javascriptGenerator.forBlock['idamage'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const x = block.getFieldValue('x');
-      const y = block.getFieldValue('y');
-      console.log(value)
-      return "doDamage(" + x + ", " + y + ");";
+      const x = generator.valueToCode(block, 'x', javascript.Order.NONE);
+      const y = generator.valueToCode(block, 'y', javascript.Order.NONE);
+      const ammount = generator.valueToCode(block, 'ammount', javascript.Order.NONE);
+       
+      return "doDamage("+ammount+", " + x + ", " + y + ");";
     }
 
     javascript.javascriptGenerator.forBlock['ndamage'] = function (block, generator) {
       // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
-      const x = block.getFieldValue('x');
-      const y = block.getFieldValue('y');
-      console.log(value)
-      return "doAttack(" + x + ", " + y + ");";
+      const x = generator.valueToCode(block, 'x', javascript.Order.NONE);
+      const y = generator.valueToCode(block, 'y', javascript.Order.NONE);
+      const scaling = generator.valueToCode(block, 'scaling', javascript.Order.NONE);
+       
+      return "doAttack(" +scaling+", "+ x + ", " + y + ");";
     }
 
     workspace = Blockly.inject(
@@ -442,6 +474,7 @@ function run_blockly() {
   // clearItemEvals();
   javascript.javascriptGenerator.addReservedWords('code');
   var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+  console.log(code);
   eval(code);
 }
 function workee() {
@@ -522,6 +555,6 @@ function addWorker(item, toolboxCopy, purpose) {
     // const value = generator.valueToCode(block, 'MY_VALUE_INPUT', Order.ATOMIC);
     console.log("HERE")
     console.log(statement)
-    return "setFunc(\"" + purpose + "\", " + id + ",(number, health, x, y) => {" + statement + "}); ";
+    return "setFunc(\"" + purpose + "\", " + id + ",(number, health, x, y, scaling) => {" + statement + "}); ";
   }
 }

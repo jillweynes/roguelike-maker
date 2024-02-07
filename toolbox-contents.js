@@ -387,6 +387,10 @@ const toolbox = {
           "kind": "block",
           "type": "y"
         },
+        {
+          "kind": "block",
+          "type": "scaling"
+        },
       ]
     },
     {

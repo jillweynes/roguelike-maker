@@ -33,6 +33,8 @@ function start_game() {
     document.getElementById("start").style.display = "block";
     document.getElementById("list").innerHTML = "";
     document.getElementById("end").style.display = "none"
+    playerhealth = 100;
+    
     document.getElementById("starttext").innerText = get_text("sttitle")
     document.getElementById("startdesc").innerText = get_text("stdesc")
     Promise.resolve(get("stimg")).then((res) => {
@@ -52,7 +54,7 @@ function start_game() {
     var wer = input.addEventListener("keydown", function abc(event) {
         document.getElementById("start").style.display = "none";
         input.removeEventListener("keydown", abc);
-        console.log("qwe")
+        //console.log("qwe")
         clearInterval(pidd);
         create_game();
     });
@@ -193,7 +195,7 @@ function create_game() {
                     spawnDefaultEnemy();
                 }
             }
-            console.log(items);
+            //console.log(items);
         }
 
 
@@ -210,7 +212,7 @@ function create_game() {
 
     function handleChest() {
         document.getElementById("itemPicker").style.display = "block";
-        console.log(allItems)
+        //console.log(allItems)
         item1 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
         item2 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
         item3 = allItems[Math.floor(ROT.RNG.getUniform() * allItems.length)]
@@ -415,13 +417,7 @@ function create_game() {
         playerhealth -= 10;
         updateUI();
     }
-    function updateUI() {
-        if (playerhealth < 0) {
-            document.getElementById("end").style.display = "block"
-        }
-        document.getElementById("currhealth").style.width = (playerhealth / maxhealth) * 100 + "%"
-        document.getElementById("maxhealth").style.width = maxhealth + "%"
-    }
+
     function spawnChest() {
         chest = getRandomSpawnPoint();
         chests.push(chest);
@@ -436,74 +432,49 @@ function create_game() {
 function attack() {
     var newx = playerx + mrd.x;
     var newy = playery + mrd.y;
-    var id = Math.random()
-    attacks.push({ x: newx, y: newy, id });
-
-    setTimeout(() => {
-        attacks = attacks.filter((el) => { el.id != id })
-    }, 300)
-
-    calculated_dmg();
-
-    //fix functions below
-    //appropriatley call functions below
-
+    doAttack(1, newx, newy)
 }
-function calculated_dmg() {
-    function getRepeatedElements(inputList) {
-        // Initialize an empty Map to store counts
-        const counts = new Map();
+function getRepeatedElements(inputList) {
 
-        // Iterate through the inputList
-        inputList.forEach(item => {
-            // If the item is not in counts, initialize its count to 1
-            if (!counts.has(item)) {
-                counts.set(item, 1);
-            } else {
-                // If the item is already in counts, increment its count
-                counts.set(item, counts.get(item) + 1);
-            }
-        });
+    const counts = new Map();
 
-        // Create an array to store unique items and their counts
-        const result = [];
+    inputList.forEach(item => {
 
-        // Iterate through the counts Map and push items with counts to the result array
-        counts.forEach((count, item) => {
-            result.push({ item, count });
-        });
+        if (!counts.has(item)) {
+            counts.set(item, 1);
+        } else {
 
-        return result;
-    }
-
-    //First check valid position
-    var filtered = getRepeatedElements(items);
-    console.log("qwe")
-    console.log(filtered);
-    filtered.forEach((tem) => {
-        
-        
-        var cmd = get_cmd(tem.item, "on hit")
-        console.log(cmd);
-        cmd(tem.count, playerhealth, playerparam1, playerparam2, playerparam3, playerx, playery)
-    
+            counts.set(item, counts.get(item) + 1);
+        }
     });
-    //call instant dmg to do dmg to the guy
+
+    const result = [];
+
+
+    counts.forEach((count, item) => {
+        result.push({ item, count });
+    });
+
+    return result;
+}
+   
 
     //bleed loop w wait
     //whip keep spawning normal damage up
     //bomb instant damage on die
     //crit change w checking a random number depedning on how may of that itm
 
+function updateUI() {
+    if (playerhealth < 0) {
+        document.getElementById("end").style.display = "block"
+    }
+    document.getElementById("currhealth").style.width = (playerhealth / maxhealth) * 100 + "%"
+    document.getElementById("maxhealth").style.width = maxhealth + "%"
 }
-// function instant_dmg(pos, dmg) {
-//              //if die
-//       filtered.forEach((tem) => eval("total += die_" + tem.element.name + "(" + tem.count + ");"));
-// }
-
 
 function setHealth(health) {
     playerhealth = health;
+    updateUI();
     
 }
 
@@ -511,14 +482,48 @@ function doDamage(dmg, x, y) {
     console.log("Implement")
 }
 function doAttack(scaling, x, y) {
-    console.log("Implement")
+    var id = Math.random()
+    attacks.push({ x, y, id });
+
+    setTimeout(() => {
+        attacks = attacks.filter((el) => { el.id != id })
+    }, 300)
+
+    var hit = false;
+     for (var i = 0; i < enemies.length; i++) {
+        if (enemies[i].x == x && enemies[i].y == y) {
+            hit = true;
+        }
+
+    }
+
+    if (hit) {
+        runAll("on hit", playerhealth, playerx, playery, scaling)
+    }
+    else {
+        runAll("on miss",playerhealth, playerx, playery, scaling)
+    }
+     
+}
+function runAll(func,h,x,y,s) {
+    var filtered = getRepeatedElements(items);
+    promices = []
+        filtered.forEach((tem) => {
+         
+         
+            var cmd = get_cmd(tem.item, func)
+            //console.log(cmd);
+            promices.push(new Promise((resolve)=>{cmd(tem.count,h,x,y,s); resolve()}));
+
+        });
+        Promise.all(promices);
+
 }
 
-
-var items = [0, 0, 0];
+var vars = [0, 0, 0];
 function getVar(n) {
-    return items[n];
+    return vars[n];
 }
 function setVar(n, val) {
-    items[n] = val;
+    vars[n] = val;
 }

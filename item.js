@@ -166,6 +166,9 @@ function get_cmd(id, type) {
     console.log(id)
     console.log(type)
     console.log(allItems)
+    if (!(id === parseInt(id))) {
+        id = id.id
+    }
     if (allItems[id].funcs.get(type) == null) {
         return ()=>{return null};
     }
