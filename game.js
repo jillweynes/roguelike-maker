@@ -11,6 +11,7 @@ var playerparam1 = 0;
 var playerparam2 = 0;
 var playerparam3 = 0;
 var maxhealth = 100;
+var gameid;
 function teardown() {
     if (loop != -1) {
         clearInterval(loop);
@@ -34,7 +35,9 @@ function start_game() {
     document.getElementById("list").innerHTML = "";
     document.getElementById("end").style.display = "none"
     playerhealth = 100;
-    
+    items = [];
+    gameid = Math.random();
+
     document.getElementById("starttext").innerText = get_text("sttitle")
     document.getElementById("startdesc").innerText = get_text("stdesc")
     Promise.resolve(get("stimg")).then((res) => {
@@ -270,7 +273,25 @@ function create_game() {
 
     updateUI();
 
+    function remakeMap() {
+        map = new ROT.Map.Rogue(W, H);
+        map.create(createCallback);
+        var spawn = getRandomSpawnPoint();
+        playerx = spawn.x;
+        playery = spawn.y;
+        for (var i = 0; i < 5; i++) {
+            spawnDefaultEnemy();
+        }
+        for (var i = 0; i < 5; i++) {
+            spawnChest();
+        }
+    }
     async function work() {
+        if (chests.length == 0) {
+            remakeMap();
+        }
+
+
         var lightData = {};
         input.focus();
 
@@ -372,10 +393,15 @@ function create_game() {
     function spawnDefaultEnemy() {
         var enemy = getRandomSpawnPoint();
         enemy.pid = setInterval(() => { enemyMove(enemy); }, 400 + (ROT.RNG.getUniform() * 400));
+        enemy.health = 100;
+        var len = items.length;
+        if (len > 10) {
+            enemy.health = 100 + (len - 10) * 20
+        }
         enemies.push(enemy);
     }
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 7; i++) {
         spawnDefaultEnemy();
     }
     function enemyMove(me) {
@@ -415,6 +441,11 @@ function create_game() {
     }
     function doPlayerDmg() {
         playerhealth -= 10;
+        if (items.length > 6) {
+            playerhealth -= 5;
+        }
+        updateUI();
+        runAll("on take damage", playerhealth, x, y, -1, -1)
         updateUI();
     }
 
@@ -432,7 +463,7 @@ function create_game() {
 function attack() {
     var newx = playerx + mrd.x;
     var newy = playery + mrd.y;
-    doAttack(1, newx, newy)
+    doAttack(1, newx, newy, gameid)
 }
 function getRepeatedElements(inputList) {
 
@@ -457,12 +488,12 @@ function getRepeatedElements(inputList) {
 
     return result;
 }
-   
 
-    //bleed loop w wait
-    //whip keep spawning normal damage up
-    //bomb instant damage on die
-    //crit change w checking a random number depedning on how may of that itm
+
+//bleed loop w wait
+//whip keep spawning normal damage up
+//bomb instant damage on die
+//crit change w checking a random number depedning on how may of that itm
 
 function updateUI() {
     if (playerhealth < 0) {
@@ -472,51 +503,81 @@ function updateUI() {
     document.getElementById("maxhealth").style.width = maxhealth + "%"
 }
 
-function setHealth(health) {
-    playerhealth = health;
-    updateUI();
-    
+function setHealth(health, id) {
+    if (gameid == id) {
+        playerhealth = health;
+        updateUI();
+    }
+
+
 }
 
-function doDamage(dmg, x, y) {
-    console.log("Implement")
-}
-function doAttack(scaling, x, y) {
-    var id = Math.random()
-    attacks.push({ x, y, id });
+function doDamage(dmg, x, y, id) {
+    if (gameid == id) {
+        var hit = -1;
+        for (var i = 0; i < enemies.length; i++) {
+            if (enemies[i].x == x && enemies[i].y == y) {
+                hit = enemies[i]
+            }
 
-    setTimeout(() => {
-        attacks = attacks.filter((el) => { el.id != id })
-    }, 300)
-
-    var hit = false;
-     for (var i = 0; i < enemies.length; i++) {
-        if (enemies[i].x == x && enemies[i].y == y) {
-            hit = true;
         }
 
-    }
+        hit.health -= dmg;
 
-    if (hit) {
-        runAll("on hit", playerhealth, playerx, playery, scaling)
+        if (hit.health < 0) {
+            clearInterval(hit.pid);
+            hit.x = 100
+            hit.y = 100
+            runAll("on kill", playerhealth, x, y, -1, -1)
+        }
     }
-    else {
-        runAll("on miss",playerhealth, playerx, playery, scaling)
-    }
-     
 }
-function runAll(func,h,x,y,s) {
+function doAttack(scaling, x, y, id) {
+    console.log(gameid)
+    console.log(id)
+    if (gameid == id) {
+        if (scaling > 0) {
+            var id = Math.random()
+            attacks.push({ x, y, id });
+
+            setTimeout(() => {
+                attacks = attacks.filter((el) => { el.id != id })
+            }, 300)
+        }
+
+
+        var hit = -1;
+        for (var i = 0; i < enemies.length; i++) {
+            if (enemies[i].x == x && enemies[i].y == y) {
+                hit = enemies[i].id;
+            }
+
+        }
+        console.log(hit)
+
+        if (hit != -1) {
+            runAll("on hit", playerhealth, x, y, scaling, hit);
+            if (scaling > 0) {
+                doDamage(30 * scaling, x, y, gameid)
+            }
+        }
+        else {
+            runAll("on miss", playerhealth, x, y, scaling, -1)
+        }
+    }
+}
+function runAll(func, h, x, y, s, e) {
     var filtered = getRepeatedElements(items);
     promices = []
-        filtered.forEach((tem) => {
-         
-         
-            var cmd = get_cmd(tem.item, func)
-            //console.log(cmd);
-            promices.push(new Promise((resolve)=>{cmd(tem.count,h,x,y,s); resolve()}));
+    filtered.forEach((tem) => {
 
-        });
-        Promise.all(promices);
+
+        var cmd = get_cmd(tem.item, func)
+        //console.log(cmd);
+        promices.push(new Promise((resolve) => { cmd(tem.count, h, x, y, s, e, gameid); resolve() }));
+
+    });
+    Promise.all(promices);
 
 }
 
@@ -524,6 +585,9 @@ var vars = [0, 0, 0];
 function getVar(n) {
     return vars[n];
 }
-function setVar(n, val) {
-    vars[n] = val;
+function setVar(n, val, id) {
+    if (gameid == id) {
+        vars[n] = val;
+    }
+
 }
