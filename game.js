@@ -34,6 +34,8 @@ function start_game() {
     document.getElementById("start").style.display = "block";
     document.getElementById("list").innerHTML = "";
     document.getElementById("end").style.display = "none"
+    document.getElementById("maxhealth").style.display = "none"
+    document.getElementById("list").style.display = "none"
     playerhealth = 100;
     items = [];
     gameid = Math.random();
@@ -70,6 +72,10 @@ function create_game() {
     document.getElementById("block").style.display = "none";
     document.getElementById("gameout").style.display = "block";
     document.getElementById("items").style.display = "none";
+    document.getElementById("maxhealth").style.display = "block"
+    document.getElementById("list").style.display = "block"
+
+
 
     //Images
     var tileSet = document.createElement("img");
@@ -445,7 +451,7 @@ function create_game() {
             playerhealth -= 5;
         }
         updateUI();
-        runAll("on take damage", playerhealth, x, y, -1, -1)
+        runAll("on take damage", playerhealth, playerx, playery, -1, -1)
         updateUI();
     }
 
@@ -498,6 +504,8 @@ function getRepeatedElements(inputList) {
 function updateUI() {
     if (playerhealth < 0) {
         document.getElementById("end").style.display = "block"
+        document.getElementById("maxhealth").style.display = "none"
+        document.getElementById("list").style.display = "none"
     }
     document.getElementById("currhealth").style.width = (playerhealth / maxhealth) * 100 + "%"
     document.getElementById("maxhealth").style.width = maxhealth + "%"
