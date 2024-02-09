@@ -395,6 +395,10 @@ const toolbox = {
           "kind": "block",
           "type": "w"
         },
+        {
+          "kind": "block",
+          "type": "eid"
+        },
       ]
     },
     {
@@ -441,5 +445,11 @@ const toolbox = {
         }
       ]
     },
+    {
+      "kind": "category",
+      "name": "Variables (only use in loops)",
+      "custom": "VARIABLE"
+    },
+    
   ],
 };

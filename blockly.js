@@ -189,6 +189,21 @@ function create_blockly() {
       }
     };
 
+    Blockly.Blocks['eid'] = {
+      init: function () {
+        this.jsonInit(
+          {
+            "type": "enemy id",
+            "message0": "enemy id",
+            "output": null,
+            "colour": 230,
+            "tooltip": "",
+            "helpUrl": ""
+          }
+        );
+      }
+    };
+
     Blockly.Blocks['sone'] = {
       init: function () {
         this.jsonInit(
@@ -434,6 +449,13 @@ function create_blockly() {
       const value = block.getFieldValue('NAME');
        
       return ["scaling", javascript.Order.NONE];
+    }
+
+    javascript.javascriptGenerator.forBlock['eid'] = function (block, generator) {
+      // const statement = generator.statementToCode(block, 'MY_STATEMENT_INPUT');
+      const value = block.getFieldValue('NAME');
+       
+      return ["enemyid", javascript.Order.NONE];
     }
 
     javascript.javascriptGenerator.forBlock['sone'] = function (block, generator) {

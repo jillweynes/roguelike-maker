@@ -400,6 +400,7 @@ function create_game() {
         var enemy = getRandomSpawnPoint();
         enemy.pid = setInterval(() => { enemyMove(enemy); }, 400 + (ROT.RNG.getUniform() * 400));
         enemy.health = 100;
+        enemy.id = Math.random();
         var len = items.length;
         if (len > 10) {
             enemy.health = 100 + (len - 10) * 20
@@ -496,8 +497,6 @@ function getRepeatedElements(inputList) {
 }
 
 
-//bleed loop w wait
-//whip keep spawning normal damage up
 //bomb instant damage on die
 //crit change w checking a random number depedning on how may of that itm
 
