@@ -12,6 +12,7 @@ function addItem() {
     var el = document.getElementById("items")
 
     var div = document.createElement("div")
+    div.setAttribute("class", "flex")
     var name = document.createElement("input")
     name.setAttribute("id", allItems.length + "name")
     name.setAttribute("value", "My great item")
@@ -55,14 +56,14 @@ async function get(el)  {
         if (fileInput != null) {
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-        
+
                 reader.onload = function (e) {
                     // const previewImage = document.getElementById('previewImage');
                     // previewImage.src = e.target.result;
                     // console.log(e.target.result);
                     resolve(e.target.result);
                 };
-        
+
                 reader.readAsDataURL(fileInput.files[0]);
             }
             else {
@@ -72,9 +73,9 @@ async function get(el)  {
         else {
             resolve("tiles.png")
         }
-        
+
     })
-   
+
 }
 function get_text(el) {
     const fileInput = document.getElementById(el);
@@ -89,7 +90,7 @@ function imgWorker() {
 
     const fileInputs = all.map((el) => document.getElementById(el))
     const numImages = fileInputs.length;
-    
+
     if (numImages > 1) {
         const readers = Array.from(fileInputs).map((fileInput) => {
             console.log(fileInput)
@@ -120,16 +121,16 @@ function imgWorker() {
             }
 
         });
-    
+
         Promise.all(readers).then((base64Images) => {
 
             const combinedCanvas = document.getElementById('combinedCanvas');
             const combinedImage = document.getElementById('combinedImage');
-    
+
             const context = combinedCanvas.getContext('2d');
             combinedCanvas.width = all.length * 32
             combinedCanvas.height =  32
-    
+
             let offsetY = 0;
             base64Images.forEach((img) => {
                 console.log(img)
@@ -137,9 +138,9 @@ function imgWorker() {
                     context.drawImage(img, offsetY, 0);
                     offsetY += img.height;
                 }
-                
+
             });
-    
+
             // Display the combined image
             combinedImage.src = combinedCanvas.toDataURL();
             combinedCanvas.style.display = 'block';
@@ -155,7 +156,7 @@ function getImages() {
 
 function setFunc(e, id, f) {
     console.log(id)
-    allItems[id].funcs.set(e, f); 
+    allItems[id].funcs.set(e, f);
 }
 function clearItemEvals() {
     for (var i = 0; i < items.length; i++) {
@@ -174,6 +175,6 @@ function get_cmd(id, type) {
     }
     else {
         return allItems[id].funcs.get(type)
-        
+
     }
 }
