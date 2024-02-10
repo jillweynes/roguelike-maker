@@ -178,3 +178,14 @@ function get_cmd(id, type) {
 
     }
 }
+function onBeforeUnload(e) {
+
+        e.preventDefault();
+        e.returnValue = '';
+        return;
+
+
+    delete e['returnValue'];
+}
+
+window.addEventListener('beforeunload', onBeforeUnload);
