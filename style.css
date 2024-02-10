@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+:root {
+    --color1: hsl(275, 100%, 40%);
+    --color2: hsl(202, 100%, 70%);
+    --color3: hsl(272, 100%, 33%);
+    --color4: hsl(0, 0%, 10%);
+    --color5: hsl(277, 38%, 54%);
+    --dark-color: hsl(0, 0%, 0%);
+    --light-color: hsl(0, 0%, 100%);
+}
+
+.flex {
+    display: flex;
+}
+
+.col {
+    flex-direction: column;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.btn {
+    background-color: var(--color1);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.15385;
+    margin: 0;
+    outline: none;
+    padding: 8px .8em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+        background-color: var(--color3);
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+    }
+
+    &:active {
+        background-color: var(--color3);
+        box-shadow: none;
+    }
+}
+
+.fuck-css {
+    padding: 1vw;
+    padding-top: 0vw;
+    padding-left: 0vw;
+}
+
+.fuck-css-2 {
+    padding: 1vw;
+    padding-top: 0vw;
+    padding-right: 0vw;
+}
+
+header {
+    background-color: var(--color4);
+    color: var(--color1);
+    align-items: center;
+    justify-content: space-between;
+}
+
+header img {
+    width: 100%;
+    max-width: 5vw;
+    height: auto;
+    padding: 0.5vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    display: block;
+    color: var(--color1);
+    text-align: center;
+    font-size: 1.1em;
+    padding: 1vw;
+
+    &:hover {
+        color: var(--light-color);
+    }
+}
+
+nav ul {
+    list-style-type: none;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--dark-color);
+}
+
+main {
+    background-color: var(--color5);
+    color: var(--lightColor);
+    padding: 0.5vw;
+    font-size: 1.25em;
+    padding: 1vw;
+}
+
+a {
+    color: var(--light-color);
+}
+
+footer {
+    background-color: var(--color4);
+    color: var(--color5);
+    text-align: center;
+    padding: 0.5vw;
+}
