@@ -48,6 +48,7 @@ function start_game() {
 
 
     input = document.createElement("input");
+    input.style.opacity = "0";
     input.style.position = "fixed"
     input.style.top = "0"
     document.getElementById("gameout").appendChild(input)
