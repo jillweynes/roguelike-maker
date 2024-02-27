@@ -2,6 +2,6 @@
 
 One of the things of all time
 
-## To-Do
+I apologise in advance
 
-- CSS
+Created for a mini competition [GameDevSoc](http://bit.ly/shefdev) hosted during ShefJam X
