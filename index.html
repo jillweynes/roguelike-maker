@@ -1,142 +1,183 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-	<title>Roguelike Creator</title>
+	<meta charset="utf-8">
+	<meta name="authors" content="Will, Ayyub">
+	<meta name="description" content="Roguelike Maker">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+
+	<link rel="stylesheet" href="style.css">
+
+	<link rel="icon" href="Logo.png">
+	<title>Roguelike Maker</title>
 </head>
 
-<body onload="">
-	<h1>Roguelike Creator</h1>
-	<p>Can you work around the restrictions to create something workable? 
-	Possivle inspritations of items include: <a href="https://breezewiki.com/riskofrain2/wiki/Items">RoR2</a> and <a href="https://www.tboi.com/rebirth">Isaac</a></p>
-	<button onclick="create_items()">Config</button>
-	<button onclick="create_blockly()">Code</button>
-	<button onclick="start_game()">Game</button>
-	
-	
-	<div style="position: absolute;">
-		<div id="gameout" style="width:1600px; height:800px; display: none; background-color: black;">
-			<div id="game" style="width:1600px; height:800px"></div>
-			<div style="position: absolute; top: 0px; left:0;">
-				<div style="width:1600px; height:800px">
-					<div id="start"
-						style=" position: absolute; background-color:rgb(0, 0, 0); color:white; top:0; left:0; width:100%; height:100%">
-							<h1 id="starttext"></h1>
-							<h1 id="startdesc"></h1>
+<body class="flex col" onload="">
+
+	<header class="flex">
+		<div class="flex">
+			<img src="Clear Logo.png" alt="Logo">
+			<h1>Roguelike Maker</h1>
+		</div>
+		<nav>
+			<ul class="flex">
+				<button onclick="create_items()">Config</button>
+				<button onclick="create_blockly()">Code</button>
+				<button onclick="start_game()">Game</button>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<p>Can you work around the restrictions to create something workable? <br>
+			Possible inspritations of items include
+			<a href="https://breezewiki.com/riskofrain2/wiki/Items">Risk of Rain 2</a> and
+			<a href="https://www.tboi.com/rebirth">The Binding of Isaac</a>
+		</p>
+
+		<div id="pain" style="position: absolute;">
+			<div id="gameout" style="width:1600px; height:800px; display: none">
+				<div id="game" style="width:1600px; height:800px"></div>
+				<div style="position: absolute; top: 0px; left:0;">
+					<div style="width:1600px; height:800px">
+						<div id="start"
+							style=" position: absolute; background-color:rgb(0, 0, 0); color:white; top:0; left:0; width:100%; height:100%">
+							<h1 class="center-text" id="starttext"></h1>
+							<h1 class="center-text" id="startdesc"></h1>
 							<img id="startwidth" width="1600" height="300" />
-							<p>Press any key to continue</p>
+							<p class="center-text">Press any key to continue ...</p>
 						</div>
 					</div>
 					<div id="end"
 						style=" position: absolute; background-color:rgb(0, 0, 0); color:white; top:0; left:0; width:100%; height:100%; display: none;">
-							<h1>DEAD</h1>
-						</div>
+						<h1 class="center-text">Game Over</h1>
 					</div>
-					<div
-						style=" position: absolute; background-color:rgba(255, 255, 255, 0.116); top:0; left:0; width:100%;">
-						<div id="list" style="display: flex; flex-direction: row;">
-						</div>
+				</div>
+				<div
+					style=" position: absolute; background-color:rgba(255, 255, 255, 0.116); top:0; left:0; width:100%;">
+					<div id="list" style="display: flex; flex-direction: row;">
 					</div>
-					<div
-						style=" position: absolute; background-color:rgba(255, 255, 255, 0); bottom:0; left:0; width:20%; height: 5%;">
-						<div id="maxhealth" style="background-color: gray; height: 100%;">
-							<div id="currhealth" style="background-color: red; height: 100%;"></div>
-						</div>
+				</div>
+				<div
+					style=" position: absolute; background-color:rgba(255, 255, 255, 0); bottom:0; left:0; width:20%; height: 5%;">
+					<div id="maxhealth" style="background-color: gray; height: 100%;">
+						<div id="currhealth" style="background-color: red; height: 100%;"></div>
 					</div>
-					<div id="itemPicker"
-						style=" display:none; position: absolute; background-color:rgb(0, 0, 0); color:white; top:25%; left:25%; width:50%; height:50%">
-						<div style="display: flex; flex-direction: row;">
-							<div style="width: 33%;">
-								<img id="img1" src="tiles.png" width="100" height="100">
-								<h1 id="name1">1</h1>
-								<p id="desc1">1</p>
-								<p>[PRESS 1]</p>
-							</div>
-							<div style="width: 33%;">
-								<img id="img2" src="tiles.png" width="100" height="100">
-								<h1 id="name2">1</h1>
-								<p id="desc2">1</p>
-								<p>[PRESS 2]</p>
-							</div>
-							<div style="width: 33%;">
-								<img id="img3" src="tiles.png" width="100" height="100">
-								<h1 id="name3">1</h1>
-								<p id="desc3">1</p>
-								<p>[PRESS 3]</p>
-							</div>
+				</div>
+				<div id="itemPicker"
+					style=" display:none; position: absolute; background-color:rgb(0, 0, 0); color:white; top:25%; left:25%; width:50%; height:50%">
+					<div style="display: flex; flex-direction: row;">
+						<div style="width: 33%;">
+							<img id="img1" src="tiles.png" width="100" height="100">
+							<h1 id="name1">1</h1>
+							<p id="desc1">1</p>
+							<p>[PRESS 1]</p>
+						</div>
+						<div style="width: 33%;">
+							<img id="img2" src="tiles.png" width="100" height="100">
+							<h1 id="name2">1</h1>
+							<p id="desc2">1</p>
+							<p>[PRESS 2]</p>
+						</div>
+						<div style="width: 33%;">
+							<img id="img3" src="tiles.png" width="100" height="100">
+							<h1 id="name3">1</h1>
+							<p id="desc3">1</p>
+							<p>[PRESS 3]</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id="block" style="width:1600px; height:800px; display: none;"></div>
-	<div id="items" style="display: block;">
-		<h2>Starting</h2>
-		
-		<h3>Starting Title</h3>
-		<input id="sttitle" value="My Great Roguelike">
+		<div id="block" style="width:1600px; height:800px; display: none;"></div>
+		<div id="items">
+			<h2>Start Screen</h2>
+			<div class="flex">
+				<div class="flex col fuck-css">
+					<h3>Title</h3>
+					<input id="sttitle" value="My Great Roguelike">
+				</div>
+				<div class="flex col fuck-css-2">
+					<h3>Description</h3>
+					<input id="stdesc" value="...">
+				</div>
+			</div>
 
-		<h3>Starting Desc</h3>
-		<input id="stdesc" value="...">
+			<h3>Image</h3>
+			<input id="stimg" type="file">
 
-		<h3>Starting Image</h3>
-		<input id="stimg" type="file">
+			<hr>
 
-		<h2>Gameplay Images (32x32 images)</h2>
-		<h3>Spritesheet</h3>
-		<!-- Canvas element for displaying the combined image -->
-		<div style="border: 1px solid black; width: fit-content;">
-			<canvas id="combinedCanvas" style="display: none; "></canvas>
+			<h2>Game Sprites</h2>
+			<p>Here you can upload your game sprites. <br>
+			Just make sure to keep the size to <b>32x32</b> for each sprite!</p>
+			<h3>Spritesheet</h3>
+			<!-- Canvas element for displaying the combined image -->
+			<div style="border: 1px solid black; width: fit-content;">
+				<canvas id="combinedCanvas" style="display: none; "></canvas>
+			</div>
+			<div style="border: 1px solid black; width: fit-content;">
+				<img id="combinedImage">
+			</div>
+
+			<button class="btn" onclick="imgWorker()">Update Spritesheet (might need to be pressed multiple
+				times)</button>
+
+			<h3>Player Sprite</h3>
+			<input id="playerimg" type="file">
+
+			<h3>Enemy Sprite</h3>
+			<input id="enemyimg" type="file">
+
+			<h3>Attack Sprite</h3>
+			<input id="atkimg" type="file">
+
+			<h3>Ground Sprite</h3>
+			<input id="gdimg" type="file">
+
+			<h3>Wall Sprite</h3>
+			<input id="wimg" type="file">
+
+			<h3>Chest Sprite</h3>
+			<input id="cimg" type="file">
+
+			<hr>
+			<h2>Items:</h2>
+			<button class="btn" onclick="addItem()">Add Item</button>
 		</div>
-		<div style="border: 1px solid black; width: fit-content;">
-			<img id="combinedImage">
-		</div>
 
-		<button onclick="imgWorker()">update Spritesheet (might need pressing multiple times)</button>
-		<h3>Player image</h3>
-		<input id="playerimg" type="file">
+		<!-- Game Scripts -->
+		<script src="rot.js"></script>
+		<script src="game.js"></script>
 
-		<h3>Enemy image</h3>
-		<input id="enemyimg" type="file">
+		<!-- Visual Scripting Scripts -->
+		<script src="blockly.js"></script>
+		<script src="toolbox-contents.js"></script>
+		<!-- Load Blockly core -->
+		<script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+		<!-- Load the default blocks -->
+		<script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+		<!-- Load a generator -->
+		<script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+		<!-- Load a message file -->
+		<script src="https://unpkg.com/blockly/msg/en.js"></script>
 
-		<h3>Attack Image</h3>
-		<input id="atkimg" type="file">
+		<!-- Items Script -->
+		<script src="item.js"></script>
 
-		<h3>Ground Image</h3>
-		<input id="gdimg" type="file">
+	</main>
 
-		<h3>Wall Image</h3>
-		<input id="wimg" type="file">
-
-		<h3>Chest Image</h3>
-		<input id="cimg" type="file">
-
-
-		<h2>Items:</h2>
-		<button onclick="addItem()">add</button>
-	</div>
-
-	<!-- Game Scripts -->
-	<script src="rot.js"></script>
-	<script src="game.js"></script>
-
-	<!-- Visual Scripting Scripts -->
-	<script src="blockly.js"></script>
-	<script src="toolbox-contents.js"></script>
-	<!-- Load Blockly core -->
-	<script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
-	<!-- Load the default blocks -->
-	<script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
-	<!-- Load a generator -->
-	<script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
-	<!-- Load a message file -->
-	<script src="https://unpkg.com/blockly/msg/en.js"></script>
-
-	<!-- Items Script -->
-	<script src="item.js"></script>
-
+	<footer>
+		<p>GameDevSoc</p>
+		<p> All rights reserved ©</p>
+	</footer>
 </body>
 
 </html>
