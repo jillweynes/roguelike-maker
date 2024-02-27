@@ -523,10 +523,16 @@ function create_blockly() {
 function run_blockly() {
   //update all item defs
   // clearItemEvals();
-  javascript.javascriptGenerator.addReservedWords('code');
-  var code = javascript.javascriptGenerator.workspaceToCode(workspace);
-  console.log(code);
-  eval(code);
+  try {
+    javascript.javascriptGenerator.addReservedWords('code');
+    var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+    console.log(code);
+    eval(code);
+  }
+  catch (e) {
+    
+  }
+  
 }
 function workee() {
   var items = returnAllValidItems();
