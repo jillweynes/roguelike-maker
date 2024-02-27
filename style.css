@@ -1,16 +1,22 @@
 * {
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
+     color: white;
+     
 }
-
+input{
+    background-color: darkgray;
+}
+button{
+    background-color: darkgray;
+}
 :root {
-    --color1: hsl(275, 100%, 40%);
-    --color2: hsl(202, 100%, 70%);
-    --color3: hsl(272, 100%, 33%);
-    --color4: hsl(0, 0%, 10%);
-    --color5: hsl(277, 38%, 54%);
+    --color1: hsl(0, 0%, 100%);
+    --color3: hsl(0, 0%, 41%);
+    --color4: hsl(0, 0%, 0%);
+    --color5: hsl(0, 0%, 24%);
     --dark-color: hsl(0, 0%, 0%);
-    --light-color: hsl(0, 0%, 100%);
+    --light-color: hsl(0, 0%, 0%);
 }
 
 .flex {
@@ -24,9 +30,12 @@
 .center-text {
     text-align: center;
 }
+.blocklyTreeLabel {
+    color:black !important;
+}
 
 .btn {
-    background-color: var(--color1);
+    background-color: darkgray;
     border: 1px solid transparent;
     border-radius: 3px;
     box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
