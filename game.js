@@ -36,6 +36,7 @@ function start_game() {
     document.getElementById("end").style.display = "none"
     document.getElementById("maxhealth").style.display = "none"
     document.getElementById("list").style.display = "none"
+    document.getElementById("itemPicker").style.display = "none";
     playerhealth = 100;
     items = [];
     gameid = Math.random();
@@ -102,8 +103,8 @@ function create_game() {
         tileSet: tileSet,
         tileMap: {
             "p": [0, 0],
-            "a": [32, 0],
-            "e": [64, 0],
+            "e": [32, 0],
+            "a": [64, 0],
             "w": [96, 0],
             "f": [128, 0],
             "c": [160, 0],
@@ -241,7 +242,7 @@ function create_game() {
 
         document.getElementById("name3").innerText = item3.name
         document.getElementById("desc3").innerText = item3.description
-        Promise.resolve(get(item1.id + "img")).then((res) => {
+        Promise.resolve(get(item3.id + "img")).then((res) => {
             document.getElementById("img3").setAttribute("src", res)
         })
 
